@@ -1,6 +1,16 @@
 import logging
 import colorlog
 
+# 添加自定义日志级别
+RECOGNITION = 25  # 在 INFO(20) 和 WARNING(30) 之间
+logging.addLevelName(RECOGNITION, 'RECOGNITION')
+
+def recognition(self, message, *args, **kwargs):
+    if self.isEnabledFor(RECOGNITION):
+        self._log(RECOGNITION, message, args, **kwargs)
+
+logging.Logger.recognition = recognition
+
 def setup_logger():
     """配置彩色日志"""
     handler = colorlog.StreamHandler()
@@ -10,6 +20,7 @@ def setup_logger():
         log_colors={
             'DEBUG':    'cyan',
             'INFO':     'green',
+            'RECOGNITION': 'red,bold',  # 添加识别结果的颜色配置
             'WARNING': 'yellow',
             'ERROR':   'red',
             'CRITICAL': 'red,bg_white',

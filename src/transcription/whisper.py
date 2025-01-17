@@ -94,8 +94,10 @@ class WhisperProcessor:
                 prompt=prompt,
                 file=("audio.wav", audio_data)
             )
-        return str(response).strip()
-
+        result = str(response).strip()
+        logger.info(f"识别结果: \033[31;1m{result}\033[0m")
+        return result
+    
     def process_audio(self, audio_buffer, mode="transcriptions", prompt=""):
         """调用 Whisper API 处理音频（转录或翻译）
         
@@ -122,10 +124,10 @@ class WhisperProcessor:
             # 仅在 groq API 时添加标点符号
             if self.service_platform == "groq" and self.add_symbol:
                 result = self.symbol.add_symbol(result)
-                logger.info(f"添加标点符号: {result}")
+                logger.info(f"添加标点符号: \033[31;1m{result}\033[0m")
             if self.optimize_result:
                 result = self.symbol.optimize_result(result)
-                logger.info(f"优化结果: {result}")
+                logger.info(f"优化结果: \033[31;1m{result}\033[0m")
 
             return result, None
             

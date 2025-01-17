@@ -178,15 +178,8 @@ class KeyboardManager:
         try:
             logger.info("正在输入转录文本...")
             self._delete_previous_text()
-            # 先输入文本和完成标记
-            self.type_temp_text(text+" ✅")
-            
-            # 等待一小段时间确保文本已输入
-            time.sleep(0.5)
-            
-            # 删除完成标记（2个字符：空格和✅）
-            self.temp_text_length = 2
-            self._delete_previous_text()
+            # 直接输入文本，不添加完成标记
+            self.type_temp_text(text)
             
             logger.info("文本输入完成")
             
