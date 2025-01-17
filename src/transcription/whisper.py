@@ -85,6 +85,7 @@ class WhisperProcessor:
                 model="whisper-large-v3",
                 response_format="text",
                 prompt=prompt,
+                temperature=0.0,
                 file=("audio.wav", audio_data)
             )
         else:  # transcriptions
@@ -92,6 +93,7 @@ class WhisperProcessor:
                 model="whisper-large-v3-turbo",
                 response_format="text",
                 prompt=prompt,
+                language="zh",
                 file=("audio.wav", audio_data)
             )
         result = str(response).strip()
