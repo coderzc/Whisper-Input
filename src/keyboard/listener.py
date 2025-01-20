@@ -19,6 +19,7 @@ class KeyboardManager:
         self.PRESS_DURATION_THRESHOLD = 0.5  # 按键持续时间阈值（秒）
         self.is_checking_duration = False  # 用于控制定时器线程
         self.has_triggered = False  # 用于防止重复触发
+        self.original_clipboard = None  # 用于保存原始剪贴板内容
         
         
         # 回调函数
@@ -202,6 +203,11 @@ class KeyboardManager:
         """输入临时状态文本"""
         if not text:
             return
+            
+        # 保存原始剪贴板内容（所有状态都需要）
+        if self.original_clipboard is None:  # 只在第一次保存
+            self.original_clipboard = pyperclip.paste()
+        
         # 将文本复制到剪贴板
         pyperclip.copy(text)
 
@@ -212,6 +218,16 @@ class KeyboardManager:
 
         # 更新临时文本长度
         self.temp_text_length = len(text)
+        
+        # 如果不是录音状态，则恢复剪贴板内容
+        if not self.state in (InputState.RECORDING, InputState.RECORDING_TRANSLATE):
+            # 短暂延时确保文本粘贴完成
+            time.sleep(0.1)
+            
+            # 恢复原始剪贴板内容
+            if self.original_clipboard is not None:
+                pyperclip.copy(self.original_clipboard)
+                self.original_clipboard = None
     
     def start_duration_check(self):
         """开始检查按键持续时间"""
